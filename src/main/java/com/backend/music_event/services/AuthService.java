@@ -4,7 +4,7 @@ import com.backend.music_event.model.User;
 import com.backend.music_event.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.util.Optional;
 
 @Service
@@ -38,9 +38,18 @@ public class AuthService {
         if (userDetails.getPhone() != null) user.setPhone(userDetails.getPhone());
         if (userDetails.getAddress() != null) user.setAddress(userDetails.getAddress());
         if (userDetails.getAvatarUrl() != null) user.setAvatarUrl(userDetails.getAvatarUrl());
-        // Add more fields as needed, but avoid updating password/email here unless intended
+        if (userDetails.getCity() != null) user.setCity(userDetails.getCity());
+        if (userDetails.getState() != null) user.setState(userDetails.getState());
+        if (userDetails.getZipCode() != null) user.setZipCode(userDetails.getZipCode());
+        if (userDetails.getCountry() != null) user.setCountry(userDetails.getCountry());
+        if (userDetails.getBirthDate() != null) user.setBirthDate(userDetails.getBirthDate());
 
         userRepository.save(user);
         return Optional.of(user);
+    }
+
+    // NEW: Get user by ID
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);  // Fetch user by ID
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TicketService {
@@ -18,35 +19,47 @@ public class TicketService {
     @Autowired
     private TicketRepository ticketRepository;
 
-    private static final double SERVICE_FEE_PERCENTAGE = 0.05;  // 5% service fee
+    private static final double SERVICE_FEE_PERCENTAGE = 0.05;
 
     public Ticket bookTicket(Ticket ticketDTO) {
-        // Fetch the event details from the database
         Event event = eventRepository.findById(ticketDTO.getEventId())
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        // Calculate total price, service fee, and grand total
         double totalPrice = ticketDTO.getQuantity() * event.getPrice();
         double serviceFee = totalPrice * SERVICE_FEE_PERCENTAGE;
         double grandTotal = totalPrice + serviceFee;
 
-        // Create a new Ticket object and save it to the database
         Ticket ticket = new Ticket();
         ticket.setEventId(ticketDTO.getEventId());
+        ticket.setUserId(ticketDTO.getUserId());  // Added userId setting
         ticket.setQuantity(ticketDTO.getQuantity());
         ticket.setTotalPrice(totalPrice);
         ticket.setServiceFee(serviceFee);
         ticket.setGrandTotal(grandTotal);
 
-        // Save the ticket to the database (ID will be auto-generated)
-        Ticket savedTicket = ticketRepository.save(ticket);
-
-        // Return the saved ticket, now including the auto-generated ID
-        return savedTicket;
+        return ticketRepository.save(ticket);
     }
 
     public List<Ticket> getTicketsByEvent(Long eventId) {
-        // Use the repository to find tickets by eventId
         return ticketRepository.findByEventId(eventId);
     }
+
+    public Ticket getTicketById(Long ticketId) {
+        Optional<Ticket> ticket = ticketRepository.findById(ticketId);
+        if (ticket.isPresent()) {
+            return ticket.get();
+        } else {
+            throw new RuntimeException("Ticket not found");
+        }
+    }
+    public Ticket getTicketByIdAndUser(Long ticketId, Long userId) {
+        Optional<Ticket> ticket = ticketRepository.findById(ticketId);
+
+        if (ticket.isPresent() && ticket.get().getUserId().equals(userId)) {
+            return ticket.get();
+        } else {
+            throw new RuntimeException("Ticket not found or user is not authorized");
+        }
+    }
+
 }

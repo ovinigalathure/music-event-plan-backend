@@ -61,4 +61,15 @@ public class AuthController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    // NEW: Get user profile by id
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<?> getUserProfile(@PathVariable Long id) {
+        Optional<User> user = authService.getUserById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

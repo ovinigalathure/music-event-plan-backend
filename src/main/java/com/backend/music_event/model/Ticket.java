@@ -1,3 +1,4 @@
+// Updated Ticket Model
 package com.backend.music_event.model;
 
 import jakarta.persistence.Entity;
@@ -9,10 +10,10 @@ import jakarta.persistence.Id;
 public class Ticket {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-incrementing ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long eventId; // Reference to the Event table (foreign key)
+    private Long eventId;
+    private Long userId;  // Added userId field
     private Integer quantity;
     private Double totalPrice;
     private Double serviceFee;
@@ -33,6 +34,14 @@ public class Ticket {
 
     public void setEventId(Long eventId) {
         this.eventId = eventId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Integer getQuantity() {

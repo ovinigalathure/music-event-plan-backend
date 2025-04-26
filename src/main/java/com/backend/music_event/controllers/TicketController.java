@@ -24,4 +24,14 @@ public class TicketController {
     public List<Ticket> getTicketsByEvent(@PathVariable Long eventId) {
         return ticketService.getTicketsByEvent(eventId);
     }
+
+    @GetMapping("/{ticketId}")
+    public Ticket getTicketById(@PathVariable Long ticketId) {
+        return ticketService.getTicketById(ticketId);
+    }
+    @GetMapping("/{ticketId}")
+    public Ticket getTicketById(@PathVariable Long ticketId, @RequestParam Long userId) {
+        return ticketService.getTicketByIdAndUser(ticketId, userId);
+    }
+
 }
