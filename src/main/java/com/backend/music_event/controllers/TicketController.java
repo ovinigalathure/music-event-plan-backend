@@ -29,9 +29,15 @@ public class TicketController {
     public Ticket getTicketById(@PathVariable Long ticketId) {
         return ticketService.getTicketById(ticketId);
     }
-    @GetMapping("/{ticketId}")
-    public Ticket getTicketById(@PathVariable Long ticketId, @RequestParam Long userId) {
+
+    @GetMapping("/{ticketId}/user")
+    public Ticket getTicketByIdAndUser(@PathVariable Long ticketId, @RequestParam Long userId) {
         return ticketService.getTicketByIdAndUser(ticketId, userId);
     }
 
+    // ✅ UPDATED PATH: /users/{userId}
+    @GetMapping("/users/{userId}")
+    public List<Ticket> getTicketsByUser(@PathVariable Long userId) {
+        return ticketService.getTicketsByUser(userId);
+    }
 }

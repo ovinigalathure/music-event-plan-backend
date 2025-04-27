@@ -31,7 +31,7 @@ public class TicketService {
 
         Ticket ticket = new Ticket();
         ticket.setEventId(ticketDTO.getEventId());
-        ticket.setUserId(ticketDTO.getUserId());  // Added userId setting
+        ticket.setUserId(ticketDTO.getUserId());
         ticket.setQuantity(ticketDTO.getQuantity());
         ticket.setTotalPrice(totalPrice);
         ticket.setServiceFee(serviceFee);
@@ -52,9 +52,9 @@ public class TicketService {
             throw new RuntimeException("Ticket not found");
         }
     }
+
     public Ticket getTicketByIdAndUser(Long ticketId, Long userId) {
         Optional<Ticket> ticket = ticketRepository.findById(ticketId);
-
         if (ticket.isPresent() && ticket.get().getUserId().equals(userId)) {
             return ticket.get();
         } else {
@@ -62,4 +62,7 @@ public class TicketService {
         }
     }
 
+    public List<Ticket> getTicketsByUser(Long userId) {
+        return ticketRepository.findByUserId(userId);
+    }
 }
